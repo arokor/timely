@@ -1,4 +1,4 @@
-#Timely - Lightweight and easy to use timing of JavaScript functions
+#Timely - Lightweight timing of JavaScript functions
 
 When developing in JavaScript you often find yourself in situations where you want to measure the time it takes for a function to execute. Profilers can find this out but if you just want to measure the time for a function or two you might want to try Timely. Timely doesn't affect the parameters or return values of the functions that it measures. Instead it *decorates*  the existing functions with a timing functionality that is completely transparent to the callers.
 
