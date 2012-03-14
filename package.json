@@ -1,6 +1,6 @@
 {
   "author": "Aron Kornhall <arokor@kornhall.se>",
-  "name": "Timely",
+  "name": "timely",
   "description": "Lightweight and easy to use timing decorators",
   "keywords": [
     "timing",
