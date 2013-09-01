@@ -6,7 +6,7 @@
     "timing",
     "measure time"
   ],
-  "version": "0.0.1",
+  "version": "0.0.2",
   "homepage": "https://github.com/arokor/timely",
   "repository": {
     "type": "git",
@@ -22,12 +22,13 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "nodeunit": "0.7.x"
+    "nodeunit": "0.7.x",
+    "when": "~2.3.0"
   },
-  "licences" : [
+  "licences": [
     {
-      "type" : "MIT License",
-      "url" : "https://raw.github.com/arokor/timely/master/license.txt"
+      "type": "MIT License",
+      "url": "https://raw.github.com/arokor/timely/master/license.txt"
     }
   ]
 }

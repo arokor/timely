@@ -20,17 +20,28 @@ Either...
 			return fib(n - 1) + fib(n - 2);
 		},
 
-		// Asynchronous function
+		// Asynchronous function with callback
 		wait = function(n, cb) {
 			setTimeout(function() {
 				cb(n);
 			}, 100);
 		},
 
+		// Asynchronous function returning a promise
+		wait2 = function(n) {
+      var defer = when.defer();
+			setTimeout(function() {
+				defer.resolve(n);
+			}, 100);
+      return defer.promise;
+		},
+
 		// Create a timed verion of the Synchronous funciton
 		fibT = timely(fib),
-		// Create a timed verion of the Asynchronous function
+		// Create a timed verion of the Asynchronous function with callback
 		waitT = timely.async(wait),
+		// Create a timed verion of the Asynchronous function returning a promise
+		waitT2 = timely.promise(wait2),
 		
 		// Result of Synchronous function
 		resultSync;
@@ -40,16 +51,23 @@ Either...
 	//Output results of Synchronous function. fibT.time contains the time used for the last call
 	console.log('fib(35) = ' + resultSync + ', time: ' + fibT.time + 'ms');
 
-	// Call Asynchronous function
+	// Call Asynchronous function with callback
 	waitT(42, function(resultAsync) {
-		//Output results of Asynchronous function. fibT.time contains the time used for the last call
+		//Output results of Asynchronous function. waitT.time contains the time used for the last call
 		console.log('wait(42) = ' + resultAsync + ', time: ' + waitT.time + 'ms');
+	});
+
+	// Call Asynchronous function returning a promise
+	waitT2(42).then(function(resultAsync) {
+		//Output results of Asynchronous function. waitT2.time contains the time used for the last call
+		console.log('wait2(42) = ' + resultAsync + ', time: ' + waitT2.time + 'ms');
 	});
 
 Outputs:
 
 	fib(35) = 14930352, time: 201ms
 	wait(42) = 42, time: 101ms
+	wait2(42) = 42, time: 102ms
 
 ##Demo
 To run Node demo:
@@ -63,6 +81,7 @@ To run Browser demo:
 ##API
 * [timely](#timely)
 * [timely.async](#timely.async)
+* [timely.promise](#timely.promise)
 
 ##Functions
 
@@ -88,10 +107,20 @@ __Arguments__
 
 ---------------------------------------
 
-##Tests
-Run tests with nodeunit:
+<a name="timely.promise"/>
+### timely.promise( func )
+  
+Returns a decorated version of an asynchronous function func that measures its execution time. After the returned promise has been resolved the measured time is available in the returned function's property "time".
 
-     nodeunit test
+__Arguments__
+
+    func     {Function} Function to be timed
+
+---------------------------------------
+
+##Tests
+     npm install
+     npm test
      
 ##License 
 (MIT License)

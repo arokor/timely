@@ -1,8 +1,7 @@
 // Nodeunit tests for Timely
-// Run with:
-//  >nodeunit test (in parent dir)
 
 var timely = require('../lib/timely');
+var when = require('when');
 
 
 // Test synchronous calls
@@ -111,6 +110,71 @@ exports.async = {
 
 				// Test with context
 				fTcontext(n, function(act2) {
+					test.strictEqual(act2, exp);
+					test.ok(typeof fTcontext.time === 'number', 'Expected numeric time');
+					test.done();
+				});
+			});
+		});
+	}
+};
+
+// Test promised calls
+exports.promise = {
+	testTimeFunction: function (test) {
+		// Async function
+		function f(n) {
+      var defer = when.defer();
+			setTimeout(function() { defer.resolve(n); }, 100);
+      return defer.promise;
+		}
+
+		// Timed async function
+		var fT = timely.promise(f),
+			n = 42;
+
+		f(n).then(function(exp) {
+			fT(n).then(function(act) {
+				test.strictEqual(act, exp);
+				test.ok(typeof fT.time === 'number', 'Expected numeric time');
+				test.done();
+			});
+		});
+	},
+	testTimeMethod: function(test) {
+		// Object
+		var o = {
+      x : 5,
+      f : function(n) {
+        var _this = this;
+        var defer = when.defer();
+        setTimeout(function() {
+          var i, result = 0;
+          for (i=0; i<n; i += _this.x) {
+            result += i;
+          }
+          defer.resolve(result);
+        }, 100);
+        return defer.promise;
+      }
+    };
+		var fTcontext;
+		var n = 10000000;
+		
+		// Timed method added to object
+		o.fT = timely.promise(o.f);
+
+		// Timed funciton with context
+		fTcontext = timely.promise(o.f, o);
+
+		// Tests
+		o.f(n).then(function(exp) {
+			o.fT(n).then(function(act1) {
+				test.strictEqual(act1, exp);
+				test.ok(typeof o.fT.time === 'number', 'Expected numeric time');
+
+				// Test with context
+				fTcontext(n).then(function(act2) {
 					test.strictEqual(act2, exp);
 					test.ok(typeof fTcontext.time === 'number', 'Expected numeric time');
 					test.done();
