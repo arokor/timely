@@ -53,7 +53,30 @@ exports.sync = {
 		test.strictEqual(act2, exp);
 		test.ok(typeof fTcontext.time === 'number', 'Expected numeric time');
 		test.done();
-	}
+	},
+	testMeanTime: function (test) {
+		// Fibonacci
+		function fib(n) {
+			if (n <= 2) return n;
+			return fib(n - 1) + fib(n - 2);
+		}
+
+		// Timed Fibonacci
+		var fibT = timely(fib);
+		
+    fibT(20);
+    var t20 = fibT.time;
+    var tm1 = fibT.meanTime;
+    fibT(30);
+    var t30 = fibT.time;
+    var tm2 = fibT.meanTime;
+
+		test.ok(typeof tm1 === 'number', 'Expected numeric mean time');
+		test.ok(typeof tm2 === 'number', 'Expected numeric mean time');
+    test.strictEqual(tm1, t20, 'Expected mean time after one call to equal time of call');
+		test.ok(tm2 > t20 && tm2 < t30, 'Expected mean time to be between min and max');
+		test.done();
+	},
 };
 
 
@@ -116,7 +139,30 @@ exports.async = {
 				});
 			});
 		});
-	}
+	},
+	testMeanTime: function (test) {
+		// Async function
+		function f(n, cb) {
+			setTimeout(function() { cb(n); }, n);
+		}
+
+		// Timed async function
+		var fT = timely.async(f);
+
+		fT(10, function(exp) {
+      var t10 = fT.time;
+      var tm1 = fT.meanTime;
+			fT(20, function(act) {
+        var t20 = fT.time;
+        var tm2 = fT.meanTime;
+        test.ok(typeof tm1 === 'number', 'Expected numeric mean time');
+        test.ok(typeof tm2 === 'number', 'Expected numeric mean time');
+        test.strictEqual(tm1, t10, 'Expected mean time after one call to equal time of call');
+        test.ok(tm2 > t10 && tm2 < t20, 'Expected mean time to be between min and max');
+				test.done();
+			});
+		});
+	},
 };
 
 // Test promised calls
@@ -181,5 +227,31 @@ exports.promise = {
 				});
 			});
 		});
-	}
+	},
+	testMeanTime: function (test) {
+		// Async function
+		function f(n) {
+      var defer = when.defer();
+			setTimeout(function() { defer.resolve(n); }, n);
+      return defer.promise;
+		}
+
+		// Timed async function
+		var fT = timely.promise(f),
+			n = 42;
+
+		fT(10).then(function(exp) {
+      var t10 = fT.time;
+      var tm1 = fT.meanTime;
+			fT(20).then(function(act) {
+        var t20 = fT.time;
+        var tm2 = fT.meanTime;
+        test.ok(typeof tm1 === 'number', 'Expected numeric mean time');
+        test.ok(typeof tm2 === 'number', 'Expected numeric mean time');
+        test.strictEqual(tm1, t10, 'Expected mean time after one call to equal time of call');
+        test.ok(tm2 > t10 && tm2 < t20, 'Expected mean time to be between min and max');
+				test.done();
+			});
+		});
+	},
 };
