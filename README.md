@@ -4,11 +4,13 @@ When developing in JavaScript you often find yourself in situations where you wa
 
 ##Installation
 
-Either...
+Node
 
-	npm install timely
+	  npm install timely
 
-...or clone/download Timely from github.
+Browser
+
+    bower install timely
 
 ##Usage (in Node)
 
@@ -88,7 +90,7 @@ To run Browser demo:
 <a name="timely"/>
 ### timely( func )
   
-Returns a decorated version of a synchronous function func that measures its execution time. After the function has returned the measured time is available in the returned function's property "time".
+Returns a decorated version of a synchronous function func that measures its execution time. After the function has returned the measured time is available in the returned function's property "time". The mean time of all calls is founcd in the property "meanTime".
 
 __Arguments__
 
@@ -99,7 +101,7 @@ __Arguments__
 <a name="timely.async"/>
 ### timely.async( func )
   
-Returns a decorated version of an asynchronous function func that measures its execution time. After the callback has been called the measured time is available in the returned function's property "time". It is assumed that the callback is the last parameter of the function func.
+Returns a decorated version of an asynchronous function func that measures its execution time. After the callback has been called the measured time is available in the returned function's property "time". It is assumed that the callback is the last parameter of the function func. The mean time of all calls is founcd in the property "meanTime".
 
 __Arguments__
 
@@ -110,7 +112,7 @@ __Arguments__
 <a name="timely.promise"/>
 ### timely.promise( func )
   
-Returns a decorated version of an asynchronous function func that measures its execution time. After the returned promise has been resolved the measured time is available in the returned function's property "time".
+Returns a decorated version of an asynchronous function func that measures its execution time. After the returned promise has been resolved the measured time is available in the returned function's property "time". The mean time of all calls is founcd in the property "meanTime".
 
 __Arguments__
 
@@ -125,7 +127,7 @@ __Arguments__
 ##License 
 (MIT License)
 
-Copyright (c) 2012 Aron Kornhall
+Copyright (c) 2014 Aron Kornhall <arokor@kornhall.se>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
