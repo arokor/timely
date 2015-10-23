@@ -1,91 +1,102 @@
-#Timely - Lightweight timing of JavaScript functions
+# Timely - Lightweight timing of JavaScript functions
 
 When developing in JavaScript you often find yourself in situations where you want to measure the time it takes for a function to execute. Profilers can find this out but if you just want to measure the time for a function or two you might want to try Timely. Timely doesn't affect the parameters or return values of the functions that it measures. Instead it *decorates*  the existing functions with a timing functionality that is completely transparent to the callers.
 
-##Installation
+## Installation
 
 Node
 
-	  npm install timely
+```bash
+npm install timely
+```
 
 Browser
 
-    bower install timely
+```bash
+bower install timely
+```
 
-##Usage (in Node)
+## Usage (in Node)
 
-	var timely = require('timely'),
+```js
+var timely = require('timely'),
 
-		// Synchronous function (Fibonacci)
-		fib = function(n) {
-			if (n <= 2) return n;
-			return fib(n - 1) + fib(n - 2);
-		},
+// Synchronous function (Fibonacci)
+fib = function(n) {
+	if (n <= 2) return n;
+	return fib(n - 1) + fib(n - 2);
+},
 
-		// Asynchronous function with callback
-		wait = function(n, cb) {
-			setTimeout(function() {
-				cb(n);
-			}, 100);
-		},
+// Asynchronous function with callback
+wait = function(n, cb) {
+	setTimeout(function() {
+		cb(n);
+	}, 100);
+},
 
-		// Asynchronous function returning a promise
-		wait2 = function(n) {
-      var defer = when.defer();
-			setTimeout(function() {
-				defer.resolve(n);
-			}, 100);
-      return defer.promise;
-		},
+// Asynchronous function returning a promise
+wait2 = function(n) {
+  var defer = when.defer();
+	setTimeout(function() {
+		defer.resolve(n);
+	}, 100);
+  return defer.promise;
+},
 
-		// Create a timed verion of the Synchronous funciton
-		fibT = timely(fib),
-		// Create a timed verion of the Asynchronous function with callback
-		waitT = timely.async(wait),
-		// Create a timed verion of the Asynchronous function returning a promise
-		waitT2 = timely.promise(wait2),
-		
-		// Result of Synchronous function
-		resultSync;
+// Create a timed verion of the Synchronous funciton
+fibT = timely(fib),
+// Create a timed verion of the Asynchronous function with callback
+waitT = timely.async(wait),
+// Create a timed verion of the Asynchronous function returning a promise
+waitT2 = timely.promise(wait2),
 
-	// Call Synchronous function
-	resultSync = fibT(35);
-	//Output results of Synchronous function. fibT.time contains the time used for the last call
-	console.log('fib(35) = ' + resultSync + ', time: ' + fibT.time + 'ms');
+// Result of Synchronous function
+resultSync;
 
-	// Call Asynchronous function with callback
-	waitT(42, function(resultAsync) {
-		//Output results of Asynchronous function. waitT.time contains the time used for the last call
-		console.log('wait(42) = ' + resultAsync + ', time: ' + waitT.time + 'ms');
-	});
+// Call Synchronous function
+resultSync = fibT(35);
+//Output results of Synchronous function. fibT.time contains the time used for the last call
+console.log('fib(35) = ' + resultSync + ', time: ' + fibT.time + 'ms');
 
-	// Call Asynchronous function returning a promise
-	waitT2(42).then(function(resultAsync) {
-		//Output results of Asynchronous function. waitT2.time contains the time used for the last call
-		console.log('wait2(42) = ' + resultAsync + ', time: ' + waitT2.time + 'ms');
-	});
+// Call Asynchronous function with callback
+waitT(42, function(resultAsync) {
+	//Output results of Asynchronous function. waitT.time contains the time used for the last call
+	console.log('wait(42) = ' + resultAsync + ', time: ' + waitT.time + 'ms');
+});
 
-Outputs:
+// Call Asynchronous function returning a promise
+waitT2(42).then(function(resultAsync) {
+	//Output results of Asynchronous function. waitT2.time contains the time used for the last call
+	console.log('wait2(42) = ' + resultAsync + ', time: ' + waitT2.time + 'ms');
+});
+```
+### Outputs:
 
-	fib(35) = 14930352, time: 201ms
-	wait(42) = 42, time: 101ms
-	wait2(42) = 42, time: 102ms
+```js
+fib(35) = 14930352, time: 201ms
+wait(42) = 42, time: 101ms
+wait2(42) = 42, time: 102ms
+```
 
-##Demo
+## Demo
 To run Node demo:
 
-    node demo.js
+```bash
+node demo.js
+```
     
 To run Browser demo:
 
-    Open demo.html in your favorite browser
+```bash
+Open demo.html in your favorite browser
+```
 
-##API
+## API
 * [timely](#timely)
 * [timely.async](#timely.async)
 * [timely.promise](#timely.promise)
 
-##Functions
+## Functions
 
 <a name="timely"/>
 ### timely( func )
@@ -120,11 +131,14 @@ __Arguments__
 
 ---------------------------------------
 
-##Tests
-     npm install
-     npm test
-     
-##License 
+## Tests
+
+```bash
+npm install
+npm test
+```
+
+## License 
 (MIT License)
 
 Copyright (c) 2014 Aron Kornhall <arokor@kornhall.se>
